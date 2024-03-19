@@ -1,0 +1,199 @@
+generator client {
+    provider        = "prisma-client-js"
+    previewFeatures = ["relationJoins"]
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model User {
+    id        String  @id
+    twitchId  Int     @unique @map("twitch_id")
+    username  String
+    avatarUrl String  @map("avatar_url")
+    roles     Role[]  @default([])
+    badgeId   String? @map("badge_id")
+    colorId   String? @map("color_id")
+
+    // badge        Badge?        @relation(fields: [badgeId], references: [id], onDelete: SetNull)
+    color        Color?        @relation(fields: [colorId], references: [id], onDelete: SetNull)
+    subscription Subscription?
+    channels     User[]        @relation("users_to_editors")
+    editors      User[]        @relation("users_to_editors")
+    // followers    User[]        @relation("users_to_users")
+    // follows      User[]        @relation("users_to_users")
+    emotes       Emote[]
+    sets         EmoteSet[]
+    activities   Activity[]
+    reports      Report[]
+    sessions     Session[]
+    connections  Connection[]
+
+    @@index([id, username, avatarUrl])
+    @@map("users")
+}
+
+// model Badge {
+//     id   String @id
+//     name String @unique
+//     days Int
+
+//     users User[]
+// }
+
+model Color {
+    id       String @id
+    name     String @unique
+    gradient String
+    shadow   String
+    users    User[]
+
+    @@map("colors")
+}
+
+model Subscription {
+    id      String  @id
+    founder Boolean @default(false)
+    days    Int
+    userId  String  @unique @map("user_id")
+    user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@map("subscriptions")
+}
+
+model Emote {
+    id       String   @id
+    name     String   @db.VarChar(128)
+    tags     String[] @default([])
+    width    Int
+    height   Int
+    approved Boolean  @default(false)
+    public   Boolean  @default(true)
+    animated Boolean  @default(false)
+    modifier Boolean  @default(false)
+    nsfw     Boolean  @default(false)
+    userId   String   @map("user_id")
+
+    user     User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+    versions Version[]
+    sets     EmoteSet[] @relation("emotes_to_sets")
+    activity Activity[]
+    reports  Report[]
+
+    @@index([id, name, tags, userId])
+    @@map("emotes")
+}
+
+model Activity {
+    id      String @id
+    action  Action
+    userId  String @map("user_id")
+    emoteId String @map("emote_id")
+    old     Json?  @db.JsonB
+    new     Json?  @db.JsonB
+    key     String
+
+    user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+    emote Emote @relation(fields: [emoteId], references: [id], onDelete: Cascade)
+
+    @@map("activities")
+}
+
+model Version {
+    id          String  @id
+    name        String  @db.VarChar(128)
+    description String? @db.VarChar(64)
+    emoteId     String  @map("emote_id")
+    emote       Emote   @relation(fields: [emoteId], references: [id], onDelete: Cascade)
+    index       Int     @db.SmallInt
+
+    @@map("versions")
+}
+
+model EmoteSet {
+    id       String  @id
+    name     String  @db.VarChar(64)
+    capacity Int     @default(1000)
+    userId   String  @map("user_id")
+    parentId String? @map("parent_id")
+
+    user     User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+    emotes   Emote[]    @relation("emotes_to_sets")
+    origins  EmoteSet[] @relation("sets_to_sets")
+    children EmoteSet[] @relation("sets_to_sets")
+
+    @@map("sets")
+}
+
+model Report {
+    id      String @id
+    reason  Reason
+    emoteId String @map("emote_id")
+    userId  String @map("user_id")
+
+    emote Emote @relation(fields: [emoteId], references: [id], onDelete: Cascade)
+    user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@map("reports")
+}
+
+model Session {
+    id        String   @id
+    expiresAt DateTime @db.Timestamptz(6)
+    userId    String
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@map("sessions")
+}
+
+model Connection {
+    providerId     Provider
+    providerUserId String
+    userId         String
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@id([providerId, providerUserId])
+    @@map("connections")
+}
+
+enum Role {
+    Verified    @map("verified")
+    Subscriber  @map("subscriber")
+    Founder     @map("founder")
+    Contributor @map("contributor")
+    Maintainer  @map("maintainer")
+    Moderator   @map("moderator")
+    Admin       @map("admin")
+
+    @@map("role")
+}
+
+enum Action {
+    Create  @map("create")
+    Delete  @map("delete")
+    Update  @map("update")
+    Diverge @map("diverge")
+
+    @@map("action")
+}
+
+enum Reason {
+    Explicit       @map("explicit")
+    Violent        @map("violent")
+    HateSpeech     @map("hate_speech")
+    Harassment     @map("harassment")
+    Misinformation @map("misinformation")
+
+    @@map("reason")
+}
+
+enum Provider {
+    Twitch  @map("twitch")
+    Discord @map("discord")
+
+    @@map("provider")
+}

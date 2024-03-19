@@ -1,0 +1,21 @@
+name: orbit
+services:
+  db:
+    container_name: orbit-db
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
+  redis:
+    container_name: orbit-cache
+    image: redis/redis-stack
+    ports:
+      - 6379:6379
+  search:
+    container_name: orbit-search
+    image: getmeili/meilisearch
+    ports:
+      - 7700:7700
+    environment:
+      MEILI_MASTER_KEY: ${MS_MASTER_KEY}

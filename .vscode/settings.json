@@ -1,0 +1,74 @@
+{
+	"workbench.tree.indent": 12,
+	"typescript.preferences.importModuleSpecifierEnding": "minimal",
+	"json.schemas": [
+		{
+			"fileMatch": [
+				"badges.json"
+			],
+			"schema": {
+				"type": "array",
+				"items": {
+					"type": "object",
+					"properties": {
+						"id": {
+							"type": "string"
+						},
+						"name": {
+							"type": "string"
+						},
+						"description": {
+							"type": "string"
+						},
+						"premium": {
+							"type": "boolean",
+							"default": true
+						},
+						"days": {
+							"type": "number",
+							"minimum": 0
+						}
+					},
+					"required": [
+						"id",
+						"name",
+						"description"
+					]
+				}
+			}
+		},
+		{
+			"fileMatch": [
+				"colors.json"
+			],
+			"schema": {
+				"type": "array",
+				"items": {
+					"type": "object",
+					"properties": {
+						"name": {
+							"type": "string"
+						},
+						"gradient": {
+							"type": "string"
+						},
+						"shadows": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							},
+							"default": [
+								"drop-shadow(0px 0px 0px #000000)"
+							]
+						},
+					},
+					"required": [
+						"name",
+						"gradient",
+						"shadows"
+					]
+				}
+			}
+		}
+	]
+}

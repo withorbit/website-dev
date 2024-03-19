@@ -1,0 +1,162 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+progress > div {
+	box-shadow:
+		0 0 10px theme("colors.purple.600"),
+		0 0 5px theme("colors.purple.600");
+}
+
+p > a {
+	@apply hover:text-primary-foreground/90;
+
+	color: theme("colors.primary.foreground");
+	font-weight: 500;
+}
+
+progress::-moz-progress-bar,
+progress::-webkit-progress-value {
+	background: theme("colors.primary.DEFAULT");
+}
+
+select:not(:disabled):hover {
+	cursor: pointer;
+}
+
+@layer base {
+	:root {
+		--background: 0 0% 100% /* white */;
+		--foreground: 229 84% 5% /* slate-950 */;
+		--card: 0 0% 100% /* white */;
+		--card-foreground: 229 84% 5% /* slate-950 */;
+		--popover: 0 0% 100% /* white */;
+		--popover-foreground: 229 84% 5% /* slate-950 */;
+		--primary: 272 82% 56% /* purple-600 */;
+		--primary-foreground: 270 100% 99% /* purple-50 */;
+		--secondary: 220 15% 96% /* gray-100 */;
+		--secondary-foreground: 221 40% 11% /* gray-900 */;
+		--muted: 210 41% 97% /* slate-100 */;
+		--muted-foreground: 216 17% 47% /* slate-500 */;
+		--accent: 220 15% 96% /* gray-100 */;
+		--accent-foreground: 221 40% 11% /* gray-900 */;
+		--destructive: 0 85% 61% /* red-500 */;
+		--destructive-foreground: 211 41% 99% /* slate-50 */;
+		--border: 215 32% 92% /* slate-200 */;
+		--input: 215 32% 92% /* slate-200 */;
+		--ring: 272 82% 56% /* purple-600 */;
+		--radius: 0.5rem;
+
+		font-family: "Inter var";
+		font-feature-settings: "ss01", "cv11";
+	}
+
+	.dark {
+		--background: 229 84% 5% /* slate-950 */;
+		--foreground: 211 41% 99% /* slate-50 */;
+		--card: 229 84% 5% /* slate-950 */;
+		--card-foreground: 211 41% 99% /* slate-50 */;
+		--popover: 229 84% 5% /* slate-950 */;
+		--popover-foreground: 211 41% 99% /* slate-50 */;
+		--primary: 272 82% 56% /* purple-600 */;
+		--primary-foreground: 270 100% 99% /* purple-50 */;
+		--secondary: 215 28% 17% /* gray-800 */;
+		--secondary-foreground: 210 20% 99% /* gray-50 */;
+		--muted: 218 33% 18% /* slate-800 */;
+		--muted-foreground: 216 21% 66% /* slate-400 */;
+		--accent: 215 28% 17% /* gray-800 */;
+		--accent-foreground: 210 20% 99% /* gray-50 */;
+		--destructive: 0 74% 42% /* red-700 */;
+		--destructive-foreground: 211 41% 99% /* slate-50 */;
+		--border: 218 33% 18% /* slate-800 */;
+		--input: 218 33% 18% /* slate-800 */;
+		--ring: 272 82% 56% /* purple-600 */;
+	}
+}
+
+.lucide {
+	width: 1rem;
+	height: 1rem;
+}
+
+@layer base {
+	* {
+		@apply border-border;
+	}
+
+	body {
+		@apply bg-background text-foreground;
+	}
+}
+
+@layer components {
+	.btn,
+	.btn-sm {
+		@apply text-sm transition duration-150 ease-in-out;
+
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		border: 1px solid transparent;
+		border-radius: 9999px;
+		font-weight: 500;
+	}
+
+	.username[data-color="true"] {
+		color: transparent;
+		background-clip: text;
+		background-image: var(--gradient, none);
+		filter: var(--shadow, none);
+	}
+
+	.form-field {
+		@apply rounded-md py-1.5 ring-1 ring-inset ring-slate-700 sm:text-sm/6;
+
+		display: block;
+		width: 100%;
+		border-width: 0;
+		margin-top: 8px;
+		background-color: theme("colors.slate.950");
+	}
+
+	.form-field:focus {
+		@apply ring-2 ring-inset ring-purple-500;
+	}
+
+	.card {
+		@apply rounded-3xl before:transition-opacity before:duration-300 after:transition-opacity after:duration-300;
+
+		position: relative;
+		height: 100%;
+		overflow: hidden;
+		background: theme("colors.secondary.DEFAULT");
+		padding: 1px;
+	}
+
+	.card::before {
+		@apply -left-48 -top-48 size-96 rounded-full hover:opacity-20;
+
+		pointer-events: none;
+		position: absolute;
+		z-index: 30;
+		translate: var(--mouse-x) var(--mouse-y);
+		opacity: 0;
+		background: theme("colors.purple.500");
+		filter: blur(100px);
+	}
+
+	.card::after {
+		@apply group-hover:opacity-100;
+
+		position: absolute;
+		inset: 0;
+		z-index: 10;
+		border-radius: inherit;
+		opacity: 0;
+		background: radial-gradient(
+			250px circle at var(--mouse-x) var(--mouse-y),
+			theme("colors.slate.400"),
+			transparent
+		);
+	}
+}

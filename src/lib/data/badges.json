@@ -1,0 +1,50 @@
+[
+	{
+		"id": "subscriber_founder",
+		"name": "Founder",
+		"description": "First 25 Orbit Plus subscribers",
+		"premium": true
+	},
+	{
+		"id": "subscriber_base",
+		"name": "1-Month",
+		"description": "1-Month Subscriber",
+		"premium": true,
+		"days": 0
+	},
+	{
+		"id": "subscriber_2",
+		"name": "2-Months",
+		"description": "2-Month Subscriber",
+		"premium": true,
+		"days": 30
+	},
+	{
+		"id": "subscriber_3",
+		"name": "3-Months",
+		"description": "3-Month Subscriber",
+		"premium": true,
+		"days": 60
+	},
+	{
+		"id": "subscriber_6",
+		"name": "6-Months",
+		"description": "6-Month Subscriber",
+		"premium": true,
+		"days": 180
+	},
+	{
+		"id": "subscriber_9",
+		"name": "9-Months",
+		"description": "9-Month Subscriber",
+		"premium": true,
+		"days": 270
+	},
+	{
+		"id": "subscriber_12",
+		"name": "1-Year",
+		"description": "1-Year Subscriber",
+		"premium": true,
+		"days": 360
+	}
+]
